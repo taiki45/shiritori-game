@@ -1,5 +1,3 @@
-require 'wikipedia'
-
 class WordRepository
   def initialize
     @word_cache = {}
