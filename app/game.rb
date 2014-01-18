@@ -27,18 +27,18 @@ class Game
         error = @checker.invalid?
         error.player = player; raise error if error
 
-        UI.show(word)
+        UI.show_result(player, word)
       end
     rescue GameError => e
       case e
       when OverlappingError
-        UI.tell_overlap
+        UI.tell_overlap(player)
       when ShiritoriError
-        UI.tell_shiritori_fail
+        UI.tell_shiritori_fail(player)
       when ExistenceError
-        UI.tell_no_existence
+        UI.tell_no_existence(player)
       when EndGameError
-        UI.tell_end_game
+        UI.tell_end_game(player)
       end
     end
   end
