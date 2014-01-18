@@ -1,4 +1,4 @@
-class WordChecker
+class Checker
   class OverlappingChecker
     def initialize
       @words = {}
@@ -23,7 +23,29 @@ class WordChecker
     end
   end
 
-  CHECKERS = [OverlappingChecker].freeze
+  class ShiritoriChecker
+    def initialize
+      @before_word = nil
+    end
+
+    def valid?(word)
+      return true unless @before_word
+
+      result = last_char(@before_word) == first_char(word)
+      @before_word = word
+      result
+    end
+
+    def last_char(word)
+      word.origin[-1]
+    end
+
+    def first_char(word)
+      word.origin[0]
+    end
+  end
+
+  CHECKERS = [OverlappingChecker, ShiritoriChecker].freeze
 
   def initialize
     @checkers = CHECKERS.map {|c| c.new }
