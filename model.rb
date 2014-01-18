@@ -1,3 +1,5 @@
 require 'model/word'
 require 'model/word_repository'
+require 'model/player'
+require 'model/player_repository'
 require 'model/checker'
