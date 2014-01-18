@@ -9,7 +9,7 @@ class Game
     while name = UI.ask_player
       @player_repo.store(Player.new(name))
     end
-    UI.setup_done
+    UI.setup_done(@player_repo.all)
   end
 
   def start
@@ -17,28 +17,31 @@ class Game
 
     begin
       players.each do |player|
-        raw_word = UI.ask_word
+        raw_word = UI.ask_word(player)
         raise EndGameError.new(player) unless raw_word
 
-        existence = WordRepository.contain? raw_word
+        existence = @word_repo.contain? raw_word
         raise ExistenceError.new(player) unless existence
-        word = WordRepository.resolve(raw_word)
+        word = @word_repo.resolve(raw_word)
 
-        error = @checker.invalid?
-        error.player = player; raise error if error
+        error = @checker.invalid?(word)
+        if error
+          error.player = player
+          raise error
+        end
 
         UI.show_result(player, word)
       end
     rescue GameError => e
       case e
       when OverlappingError
-        UI.tell_overlap(player)
+        UI.tell_overlap(e.player)
       when ShiritoriError
-        UI.tell_shiritori_fail(player)
+        UI.tell_shiritori_fail(e.player)
       when ExistenceError
-        UI.tell_no_existence(player)
+        UI.tell_no_existence(e.player)
       when EndGameError
-        UI.tell_end_game(player)
+        UI.tell_end_game(e.player)
       end
     end
   end

@@ -4,24 +4,38 @@ module UI
       puts "Enter player name."
       puts "empty will end joining new player."
       print "> "
-      name = gets.chomp
+      name = gets
+      return nil unless name
+
+      name = name.chomp
       name.empty? ? nil : name
     end
 
+    def setup_done(players)
+      puts "All players are:"
+      players.each {|p| puts "* #{p.name}" }
+    end
+
     def ask_word(player)
-      puts "* " * 30
-      puts "#{player.name}'s turn."
-      puts "Enter your word"
-      puts "To quit the game, enter `:quit`."
-      print "> "
+      loop do
+        puts "* " * 30
+        puts "#{player.name}'s turn."
+        puts "Enter your word"
+        puts "To quit the game, enter `:quit`."
+        print "> "
 
-      raw_word = get.chomp
+        raw_word = gets
+        return nil unless raw_word
+        raw_word = raw_word.chomp
 
-      if raw_word == ":quit"
-        nil
-      else
-        raw_word = ask_word(player) if raw_word.empty?
-        raw_word
+        case raw_word
+        when ":quit"
+          return nil
+        when ""
+          next
+        else
+          return raw_word
+        end
       end
     end
 
@@ -31,16 +45,22 @@ module UI
     end
 
     def tell_overlap(player)
+      puts "Overlapping Word"
+      puts "#{player.name} lost."
     end
 
     def tell_shiritori_fail(player)
+      puts "Shiritori fail"
+      puts "#{player.name} lost."
     end
 
     def tell_no_existence(player)
+      puts "No existence with: "
+      puts "#{player.name} lost."
     end
 
     def tell_end_game(player)
-      puts "Game ends in"
+      puts "Game ends."
     end
   end
 end

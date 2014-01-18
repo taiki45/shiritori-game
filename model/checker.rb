@@ -29,7 +29,10 @@ class Checker
     end
 
     def invalid?(word)
-      return true unless @before_word
+      unless @before_word
+        @before_word = word
+        return nil
+      end
 
       result = last_char(@before_word) == first_char(word)
       @before_word = word
@@ -53,8 +56,8 @@ class Checker
 
   def invalid?(word)
     error =  @checkers.map {|checker| checker.invalid?(word) }
-    .select {|result| !result.nil? }
+    .find {|result| result }
 
-    error
+    error.is_a?(Array) && error.empty? ? nil : error
   end
 end

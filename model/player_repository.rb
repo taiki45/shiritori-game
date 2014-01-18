@@ -16,10 +16,6 @@ class PlayerRepository
   end
 
   def store(player)
-    return if contain? player.name
-
     @players[player.name] = player
-    @list.push player
-    @counter.add
   end
 end
