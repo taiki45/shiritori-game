@@ -39,6 +39,8 @@ class Checker
       result ? nil : ShiritoriError.new
     end
 
+    private
+
     def last_char(word)
       word.origin[-1]
     end

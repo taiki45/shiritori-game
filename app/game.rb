@@ -9,6 +9,7 @@ class Game
     while name = UI.ask_player
       @player_repo.store(Player.new(name))
     end
+
     UI.setup_done(@player_repo.all)
   end
 
@@ -32,6 +33,7 @@ class Game
 
         UI.show_result(player, word)
       end
+
     rescue GameError => e
       case e
       when OverlappingError
