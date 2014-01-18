@@ -4,12 +4,12 @@ class Checker
       @words = {}
     end
 
-    def valid?(word)
+    def invalid?(word)
       invalid = overlap? word
-      return false if invalid
+      return OverlappingError.new if invalid
 
       store(word)
-      true
+      nil
     end
 
     private
@@ -28,12 +28,12 @@ class Checker
       @before_word = nil
     end
 
-    def valid?(word)
+    def invalid?(word)
       return true unless @before_word
 
       result = last_char(@before_word) == first_char(word)
       @before_word = word
-      result
+      result ? nil : ShiritoriError.new
     end
 
     def last_char(word)
@@ -51,7 +51,10 @@ class Checker
     @checkers = CHECKERS.map {|c| c.new }
   end
 
-  def check(word)
-    @checkers.map {|checker| checker.valid?(word) }.all?
+  def invalid?(word)
+    error =  @checkers.map {|checker| checker.invalid?(word) }
+    .select {|result| !result.nil? }
+
+    error
   end
 end
