@@ -55,9 +55,6 @@ class Checker
   end
 
   def invalid?(word)
-    error =  @checkers.map {|checker| checker.invalid?(word) }
-    .find {|result| result }
-
-    error.is_a?(Array) && error.empty? ? nil : error
+    @checkers.map {|checker| checker.invalid?(word) } .find {|error| error }
   end
 end
